@@ -8,6 +8,7 @@ int main(int argc, char* argv[]){
 	TetrisView tetrisView;
 	int processType;
 	int direction;
+	int mode; /////BGM ON/OFF를 위한 모드 변수. mode가 1일 경우 BGM ON / mode가 2일 경우 BGM OFF
 	DWORD tickCount;
 	int isSetMainMenu = False;
 	do{
@@ -15,6 +16,7 @@ int main(int argc, char* argv[]){
 		switch (tetrisView.mainMenu){
 		case START_MAIN_MENU:
 			TetrisView_StartGame(&tetrisView);
+			TetrisView_Bgm(&tetrisView, 1); ///// 게임 시작시 BGM 재생
 			tickCount = GetTickCount();
 			while (True){
 				processType = AUTO;
@@ -109,6 +111,16 @@ int main(int argc, char* argv[]){
 							if (key == X_KEY_CODE){
 								TetrisView_ChangeNextBlock(&tetrisView);
 							}
+						}
+						if (key == ONE_KEY_CODE){
+							mode=1;
+							TetrisView_Bgm(&tetrisView, mode);
+							break;
+						}
+						if (key == TWO_KEY_CODE){
+							mode=2;
+							TetrisView_Bgm(&tetrisView, mode);
+							break;
 						}
 					}
 				}

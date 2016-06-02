@@ -13,6 +13,7 @@ typedef struct _tetrisView{
 	int endMenu;
 }TetrisView;
 
+void TetrisView_Bgm(TetrisView* tetrisView, int mode);
 void TetrisView_StartGame(TetrisView* tetrisView);
 void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int direction);
 void TetrisView_PauseGame(TetrisView* tetrisView);
