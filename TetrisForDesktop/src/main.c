@@ -8,13 +8,16 @@ int main(int argc, char* argv[]){
 	TetrisView tetrisView;
 	int processType;
 	int direction;
+	int mode; ///// 배경음악 on/off를 조절하기 위한 변수
 	DWORD tickCount;
 	int isSetMainMenu = False;
+	mode=1; ///// 기본값 1. 1일 경우 배경음악 ON
 	do{
 		TetrisView_ProcessMainMenu(&tetrisView);
 		switch (tetrisView.mainMenu){
 		case START_MAIN_MENU:
 			TetrisView_StartGame(&tetrisView);
+			TetrisView_Bgm(&tetrisView, mode);
 			tickCount = GetTickCount();
 			while (True){
 				processType = AUTO;
@@ -110,6 +113,18 @@ int main(int argc, char* argv[]){
 							if (key == A_KEY_CODE){
 								TetrisView_ChangeNextBlock(&tetrisView);
 							}
+						}
+						///// 숫자키 1을 누를 경우 mode=1. 배경음악 ON
+						if (key == ONE_KEY_CODE){
+							mode=1;
+							TetrisView_Bgm(&tetrisView, mode);
+							break;
+						}
+						///// 숫자키 2를 누를 경우 mode-2. 배경음악 OFF
+						if (key == TWO_KEY_CODE){
+							mode=2;
+							TetrisView_Bgm(&tetrisView, mode);
+							break;
 						}
 					}
 				}
