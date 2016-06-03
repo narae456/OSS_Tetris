@@ -44,7 +44,8 @@ void TetrisView_StartGame(TetrisView* tetrisView){
 	TetrisManager_PrintDetailInfomation(&tetrisView->tetrisManager);
 }
 
-void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int direction){
+//// 매개변수 isSplash 추가
+void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int direction, int isSplash){
 
 	//it is used to move left or right at bottom in case of space which you want to move is available
 	static int processReachedCaseCount = 0;
@@ -57,6 +58,10 @@ void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int directi
 	else if (processType == AUTO){
 		TetrisManager_ProcessAuto(&tetrisView->tetrisManager);
 	}
+
+	//// 매 loop마다 검사하기 위한 splash 함수 호출
+	splash(&tetrisView->tetrisManager, direction, isSplash);
+
 	if (TetrisManager_IsReachedToBottom(&tetrisView->tetrisManager, MOVING_BLOCK)){
 		if (processType == DIRECT_DOWN){
 			processReachedCaseCount = 0;
