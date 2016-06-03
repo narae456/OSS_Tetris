@@ -21,8 +21,19 @@ enum MenuStartPosition{
 	MAIN_MENU_X = 18, MAIN_MENU_Y = 7, PAUSE_MENU_X = 5, PAUSE_MENU_Y = 12, END_MENU_X = 14, END_MENU_Y = 8
 };
 
+void TetrisView_Bgm(TetrisView* tetrisView, int mode){
+	switch(mode)
+	{
+	case 1:
+		PlaySound(TEXT(TETRIS_BACKGROUND_MUSIC_FILE_NAME), NULL, SND_ASYNC | SND_LOOP);
+		break;
+	case 2:
+		PlaySound(NULL, 0, 0);
+		break;
+	}
+}
+
 void TetrisView_StartGame(TetrisView* tetrisView){
-	PlaySound(TEXT(TETRIS_BACKGROUND_MUSIC_FILE_NAME), NULL, SND_ASYNC | SND_LOOP);
 	if (!(tetrisView->level >= MIN_SPEED_LEVEL && tetrisView->level <= MAX_SPEED_LEVEL)){
 		tetrisView->level = MIN_SPEED_LEVEL;
 	}
@@ -80,7 +91,6 @@ void TetrisView_PauseGame(TetrisView* tetrisView){
 	switch (tetrisView->pauseMenu){
 	case RESUME_PAUSE_MENU:
 		TetrisManager_StartTotalTime(&tetrisView->tetrisManager);
-		PlaySound(TEXT(TETRIS_BACKGROUND_MUSIC_FILE_NAME), NULL, SND_ASYNC | SND_LOOP);
 		break;
 	case MAIN_MENU_PAUSE_MENU:
 		TetrisManager_StopTotalTime(&tetrisView->tetrisManager);
