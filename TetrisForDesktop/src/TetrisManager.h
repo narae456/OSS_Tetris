@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include "Block.h"
+#include <time.h> //// 헤더파일 추가
 
 enum GameStatus{
 	PLAYING, END
@@ -19,6 +20,9 @@ typedef struct _tetrisManager{
 	int deletedLineCount;
 	int speedLevel;
 	int score;
+	int isSplashMode; //// 안개 구조체 정의
+	time_t randSpeedTimer; //// 아이템 실행 시간 ( 5초를 재기 위해 사용 )
+	int diff_speed; ///// 변한 속도 ( +2 또는 -2 )
 	HANDLE totalTimeThread;
 	long totalTime;
 	int isTotalTimeAvailable; // if totalTimeThread is alive, this variable is true
@@ -57,5 +61,8 @@ void TetrisManager_ChangeNextBlock(TetrisManager* tetrisManager);	//다음블럭과 �
 void TetrisManager_BlindNextBlock(TetrisManager* tetrisManager);	//다음블럭 숨기기
 
 void changeShadowColor(int level); // 레벨별로 그림자 색을 다르게 출력하는 함수
+
+void splash(TetrisManager* tetrisManager, int blockType, int isSplash);  //// 안개 아이템 함수
+void TetrisManager_randSpeed(TetrisManager* tetrisManager); //// 랜덤 속도 변환 아이템 함수
 
 #endif
