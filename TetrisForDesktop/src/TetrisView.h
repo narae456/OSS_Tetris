@@ -15,7 +15,7 @@ typedef struct _tetrisView{
 
 void TetrisView_Bgm(TetrisView* tetrisView, int mode);
 void TetrisView_StartGame(TetrisView* tetrisView);
-void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int direction);
+void TetrisView_ProcessGame(TetrisView* tetrisView, int processType, int direction, int isSplash); //// isSplash 매개변수 추가
 void TetrisView_PauseGame(TetrisView* tetrisView);
 void TetrisView_EndGame(TetrisView* tetrisView);
 void TetrisView_ShowRanking(TetrisView* tetrisView);
