@@ -1321,11 +1321,13 @@ void splash(TetrisManager* tetrisManager, int blockType, int isSplash)
 			for (i = 1; i < BOARD_ROW_SIZE - 1; i++) {
 				for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
 					if (tetrisManager->board[i][j] == FIXED_BLOCK) //// fixed block을 기준으로 가로,세로 길이 탐색
-					{						
+					{
+						WaitForSingleObject(((TetrisManager*)tetrisManager)->mutex, INFINITE);		// LOCK 걸기
 						for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
 							CursorUtil_GotoXY(2 * j, i);;
 							printf("▒"); //// 탐색한 길이 만큼 출력 
-						}						
+						}
+						ReleaseMutex(((TetrisManager*)tetrisManager)->mutex);						// LOCK 해제
 					}
 				}
 			}
@@ -1339,14 +1341,18 @@ void splash(TetrisManager* tetrisManager, int blockType, int isSplash)
 			for (i = 1; i < BOARD_ROW_SIZE - 1; i++) {
 				for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
 					if (tetrisManager->board[i][j] == FIXED_BLOCK) //// fixed block을 기준으로 가로,세로 길이 탐색
-					{						
+					{
+						WaitForSingleObject(((TetrisManager*)tetrisManager)->mutex, INFINITE);		// LOCK 걸기
 						CursorUtil_GotoXY(2 * j, i);;
-						printf("▩"); //// 탐색한 길이 만큼 출력						
+						printf("▩"); //// 탐색한 길이 만큼 출력
+						ReleaseMutex(((TetrisManager*)tetrisManager)->mutex);						// LOCK 해제
 					}
 					else if (tetrisManager->board[i][j] == EMPTY) //// 빈 공간을 기준으로 가로,세로 길이 탐색
-					{						
+					{
+						WaitForSingleObject(((TetrisManager*)tetrisManager)->mutex, INFINITE);		// LOCK 걸기
 						CursorUtil_GotoXY(2 * j, i);;
-						printf("  "); //// 탐색한 길이 만큼 출력						
+						printf("  "); //// 탐색한 길이 만큼 출력
+						ReleaseMutex(((TetrisManager*)tetrisManager)->mutex);						// LOCK 해제
 					}
 				}
 			}
