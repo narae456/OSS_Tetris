@@ -57,6 +57,9 @@ static void _TetrisManager_MakeObstacleOneLine(TetrisManager* tetrisManager);
 static void _TetrisManager_PrintItemInventory(TetrisManager* tetrisManager, int list, int index, int x, int y); //하나의 아이템 박스 생성
 static void _TetrisManager_PrintAllItemInventory(TetrisManager* tetrisManager); //전체 아이템 박스 version 2
 
+/////레벨 별 맵 설정
+static void _TetrisManager_LevelMap(TetrisManager* tetrisManager, int speedLevel, int status);
+
 //아이템에 의해 줄이 제거되는 경우 점수와 레벨에 반영되지 않는다.
 static void _TetrisManager_Item_DeleteLines(TetrisManager* tetrisManager, int* indexes, int count);
 
@@ -77,7 +80,7 @@ void TetrisManager_Init(TetrisManager* tetrisManager, int speedLevel){
 	int i;
 
 	block.current = -1;
-	_TetrisManager_InitBoard(tetrisManager);
+	_TetrisManager_InitBoard(tetrisManager, speedLevel);
 	tetrisManager->block = Block_Make(True, block);
 	tetrisManager->shadow = tetrisManager->block;
 	tetrisManager->isHoldAvailable = True;
@@ -536,7 +539,7 @@ static void _TetrisManager_PrintBlock(TetrisManager* tetrisManager, int blockTyp
 	_TetrisManager_PrintTotalTime(*tetrisManager); // because of multi thread problem, this function covers total time
 }
 
-static void _TetrisManager_InitBoard(TetrisManager* tetrisManager){
+static void _TetrisManager_InitBoard(TetrisManager* tetrisManager, int speedLevel){
 	int i;
 	memset(tetrisManager->board, EMPTY, sizeof(char)* BOARD_ROW_SIZE * BOARD_COL_SIZE);
 	for (i = 0; i < BOARD_ROW_SIZE; i++){
@@ -558,6 +561,177 @@ static void _TetrisManager_InitBoard(TetrisManager* tetrisManager){
 	tetrisManager->board[0][BOARD_COL_SIZE - 1] = RIGHT_TOP_EDGE;
 	tetrisManager->board[BOARD_ROW_SIZE - 1][0] = LEFT_BOTTOM_EDGE;
 	tetrisManager->board[BOARD_ROW_SIZE - 1][BOARD_COL_SIZE - 1] = RIGHT_BOTTOM_EDGE;
+
+	_TetrisManager_LevelMap(tetrisManager, speedLevel, FIXED_BLOCK); /////speedLevel에 따른 맵 설정
+}
+
+static void _TetrisManager_LevelMap(TetrisManager* tetrisManager, int speedLevel, int status){
+	int i, j, k;
+
+	switch(speedLevel){
+	case 1 :
+		break;
+	case 2:
+		for(i=17; i<=22; i++){
+			for(j=1; j<=4; j++)
+				tetrisManager->board[i][j]=status;
+			for(j=7; j<=12; j++)
+				tetrisManager->board[i][j]=status;
+		}
+		break;
+	case 3:
+		for(j=2; j<=11; j++)
+			tetrisManager->board[22][j]=status;
+		for(j=3; j<=10; j++)
+			tetrisManager->board[21][j]=status;
+		for(j=4; j<=9; j++)
+			tetrisManager->board[20][j]=status;
+		for(j=5; j<=8; j++)
+			tetrisManager->board[19][j]=status;
+		for(j=6; j<=7; j++)
+			tetrisManager->board[18][j]=status;
+		break;
+	case 4:
+		for(i=17; i<=22; i++){
+			for(j=1; j<=4; j++)
+				tetrisManager->board[i][j]=status;
+			for(j=9; j<=12; j++)
+				tetrisManager->board[i][j]=status;
+		}
+		tetrisManager->board[17][5]=status;
+		tetrisManager->board[17][8]=status;
+		tetrisManager->board[22][5]=status;
+		tetrisManager->board[22][8]=status;
+		break;
+	case 5:
+		for(j=2; j<=12; j++)
+			tetrisManager->board[22][j]=status;
+		for(j=3; j<=12; j++)
+			tetrisManager->board[21][j]=status;
+		for(j=4; j<=12; j++)
+			tetrisManager->board[20][j]=status;
+		for(j=5; j<=12; j++)
+			tetrisManager->board[19][j]=status;
+		for(j=6; j<=12; j++)
+			tetrisManager->board[18][j]=status;
+		for(j=7; j<=12; j++)
+			tetrisManager->board[17][j]=status;
+		for(j=8; j<=12; j++)
+			tetrisManager->board[16][j]=status;
+		for(j=9; j<=12; j++)
+			tetrisManager->board[15][j]=status;
+		for(j=10; j<=12; j++)
+			tetrisManager->board[14][j]=status;
+		for(j=11; j<=12; j++)
+			tetrisManager->board[13][j]=status;
+		tetrisManager->board[12][12]=status;
+		break;
+	case 6:
+		for(i=17; i<=18; i++){
+			tetrisManager->board[i][2]=status;
+			tetrisManager->board[i][11]=status;
+		}
+		for(i=16; i<=19; i++){
+			tetrisManager->board[i][3]=status;
+			tetrisManager->board[i][10]=status;
+		}
+		for(i=16; i<=20; i++){
+			tetrisManager->board[i][4]=status;
+			tetrisManager->board[i][9]=status;
+		}
+		for(i=17; i<=21; i++){
+			tetrisManager->board[i][5]=status;
+			tetrisManager->board[i][8]=status;
+		}
+		for(i=18; i<=22; i++){
+			tetrisManager->board[i][6]=status;
+			tetrisManager->board[i][7]=status;
+		}
+		break;
+	case 7:
+		for(j=1; j<=11; j++)
+			tetrisManager->board[12][j]=status;
+		for(j=1; j<=10; j++)
+			tetrisManager->board[13][j]=status;
+		for(j=1; j<=9; j++)
+			tetrisManager->board[14][j]=status;
+		for(j=1; j<=8; j++)
+			tetrisManager->board[15][j]=status;
+		for(j=1; j<=7; j++)
+			tetrisManager->board[16][j]=status;
+		for(j=1; j<=6; j++)
+			tetrisManager->board[17][j]=status;
+		for(j=1; j<=5; j++)
+			tetrisManager->board[18][j]=status;
+		for(j=1; j<=4; j++)
+			tetrisManager->board[19][j]=status;
+		for(j=1; j<=3; j++)
+			tetrisManager->board[20][j]=status;
+		for(j=1; j<=2; j++)
+			tetrisManager->board[21][j]=status;
+		tetrisManager->board[22][1]=status;
+		break;
+	case 8:
+		for(i=14; i<=22; i++){
+			j=26-i;
+			tetrisManager->board[i][j]=status;
+		}
+		for(i=16; i<=22; i++){
+			j=28-i;
+			tetrisManager->board[i][j]=status;
+		}
+		for(i=18; i<=22; i++){
+			j=30-i;
+			tetrisManager->board[i][j]=status;
+		}
+		for(i=20; i<=22; i++){
+			j=32-i;
+			tetrisManager->board[i][j]=status;
+		}
+		tetrisManager->board[22][12]=status;
+		break;
+	case 9:
+		for(j=2; j<=3; j++)
+			tetrisManager->board[12][j]=status;
+		for(j=1; j<=5; j++)
+			tetrisManager->board[13][j]=status;
+		tetrisManager->board[14][1]=status;
+		for(j=5; j<=6; j++)
+			tetrisManager->board[14][j]=status;
+		for(j=6; j<=7; j++)
+			tetrisManager->board[15][j]=status;
+		for(i=14; i<=19; i++)
+			tetrisManager->board[i][4]=status;
+		tetrisManager->board[18][1]=status;
+		for(j=8; j<=11; j++)
+			tetrisManager->board[18][j]=status;
+		for(j=1; j<=2; j++)
+			tetrisManager->board[19][j]=status;
+		for(j=7; j<=12; j++)
+			tetrisManager->board[19][j]=status;
+		for(j=1; j<=8; j++)
+			tetrisManager->board[20][j]=status;
+		for(j=10; j<=12; j++)
+			tetrisManager->board[20][j]=status;
+		for(j=1; j<=7; j++)
+			tetrisManager->board[21][j]=status;
+		tetrisManager->board[21][9]=status;
+		for(j=11; j<=12; j++)
+			tetrisManager->board[21][j]=status;
+		for(j=1; j<=8; j++)
+			tetrisManager->board[22][j]=status;
+		for(j=10; j<=12; j++)
+			tetrisManager->board[22][j]=status;
+		break;
+	case 10:
+		srand((unsigned int)time(NULL));
+		for(k=1; k<=95; k++){
+			i=22-(rand()%9);
+			j=12-(rand()%12);
+			tetrisManager->board[i][j]=status;
+		}
+		break;
+	}
 }
 
 static void _TetrisManager_UpSpeedLevel(TetrisManager* tetrisManager){
