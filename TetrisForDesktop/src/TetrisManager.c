@@ -417,12 +417,13 @@ void TetrisManager_UseItem(TetrisManager* tetrisManager, int index) {
 	}
 	case 4: {
 		//속도 줄이기
+		TetrisManager_randSpeed(tetrisManager);
 		break;
 	}
-	case 5: {
+	/*case 5: {
 		//속도 올리기
 		break;
-	}
+	}*/
 	}
 	//printf("%d", tetrisManager->itemArray[index - 1]);
 	itemCreateCnt--;
@@ -1280,4 +1281,78 @@ void changeShadowColor(int level) {
 		{
 			FontUtil_ChangeFontColor(0); // 그림자를 BLACK색으로 출력 (안보이게 함)
 		}
+}
+
+//// 안개 아이템 함수 정의
+void splash(TetrisManager* tetrisManager, int blockType, int isSplash)
+{
+	int i, j;
+
+	////현재 splash(안개 아이템) 작동 시 '▒'(안개) 표시
+	if (isSplash == 1)
+	{
+		if (tetrisManager->isSplashMode == 1)
+		{
+			for (i = 1; i < BOARD_ROW_SIZE - 1; i++) {
+				for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
+					if (tetrisManager->board[i][j] == FIXED_BLOCK) //// fixed block을 기준으로 가로,세로 길이 탐색
+					{
+						for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
+							CursorUtil_GotoXY(2 * j, i);;
+							printf("▒"); //// 탐색한 길이 만큼 출력 
+						}
+					}
+				}
+			}
+		}
+	}
+	////splash가 끝났을 때 원상복구
+	else
+	{
+		if (tetrisManager->isSplashMode == 0)
+		{
+			for (i = 1; i < BOARD_ROW_SIZE - 1; i++) {
+				for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
+					if (tetrisManager->board[i][j] == FIXED_BLOCK) //// fixed block을 기준으로 가로,세로 길이 탐색
+					{
+						CursorUtil_GotoXY(2 * j, i);;
+						printf("▩"); //// 탐색한 길이 만큼 출력
+					}
+					else if (tetrisManager->board[i][j] == EMPTY) //// 빈 공간을 기준으로 가로,세로 길이 탐색
+					{
+						CursorUtil_GotoXY(2 * j, i);;
+						printf("  "); //// 탐색한 길이 만큼 출력
+					}
+				}
+			}
+			tetrisManager->isSplashMode = 1;
+		}
+	}
+}
+
+//// 랜덤 속도 아이템 함수 정의
+void TetrisManager_randSpeed(TetrisManager* tetrisManager)
+{
+	///// speedLevel이 3이상일 때만 사용가능
+	if (tetrisManager->randSpeedTimer == 0 && tetrisManager->speedLevel >= 3)
+	{
+		//// 아이템 실행 시작 시간을 구함 (단위 : 초)
+		tetrisManager->randSpeedTimer = time(NULL);
+		srand(time(NULL));
+
+		//// 랜덤 값 구함 ( 0 ~ 1 )
+		int randNum = rand() % 2;
+
+		//// 랜덤 값이 0 일 때는 속도 = 속도 - 2
+		if (randNum == 0)
+		{
+			tetrisManager->diff_speed = -2;
+		}
+		//// 랜덤 값이 1 일 때는 속도 = 속도 + 2 
+		else
+		{
+			tetrisManager->diff_speed = 2;
+		}
+		tetrisManager->speedLevel += tetrisManager->diff_speed;
+	}
 }
