@@ -23,7 +23,7 @@
 
 #define ITEM_SIZE 6
 #define ITEM_LIST_SIZE 4
-char itemList[ITEM_SIZE][3] = { { 32, 32, 32 }, { 45, 49, 32 }, { 45, 50, 32 }, { 65, 76, 76 }, { 60, 60, 32 }, { 62, 62, 32 } };
+char itemList[ITEM_SIZE][3] = { { 32, 32, 32 }, { 45, 49, 32 }, { 45, 50, 32 }, { 65, 76, 76 }, { 32, 60, 32 }, { 32, 62, 32 } };
 //아스키 코드로 
 // 0 - 공백
 // 1 - 한줄 없애기
@@ -398,9 +398,14 @@ void TetrisManager_AddItem(TetrisManager* tetrisManager){ // 혜진 수정
 		itemCreateCnt--; //카운트 변수를 1감소 시켜서 아래 조건문을 실행 하게 한다.
 	}
 
-	if (tetrisManager->deletedLineCount % 1 == 0){ //그 이후 5줄을 꺴을 경우
+	if (tetrisManager->deletedLineCount % 5 == 0){ //그 이후 5줄을 꺴을 경우
 
-		tetrisManager->itemArray[itemCreateCnt] = rand() % (ITEM_SIZE - 1) + 1; //랜덤의 아이템을 생성한다.
+		if (tetrisManager->speedLevel > 2){
+			tetrisManager->itemArray[itemCreateCnt] = rand() % (ITEM_SIZE - 1) + 1; //랜덤의 아이템을 생성한다.
+		}
+		else{
+			tetrisManager->itemArray[itemCreateCnt] = rand() % (ITEM_SIZE - 3) + 1; //랜덤의 아이템을 생성한다.
+		}
 		itemCreateCnt++; //아이템이 생성된 횟수 
 	}
 	//printf("N : %d %d\n", itemCreateCnt, tetrisManager->itemArray[itemCreateCnt]);
