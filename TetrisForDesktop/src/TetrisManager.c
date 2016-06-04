@@ -352,8 +352,8 @@ DWORD TetrisManager_GetDownMilliSecond(TetrisManager* tetrisManager){
 void TetrisManager_MakeHold(TetrisManager* tetrisManager){
 
 	// use temp size (magic number)
-	int x = 60;
-	int y = 20;
+	int x = 63;
+	int y = 19;
 
 	if (tetrisManager->isHoldAvailable){
 		_TetrisManager_PrintBlock(tetrisManager, MOVING_BLOCK, EMPTY);
@@ -1318,19 +1318,21 @@ void splash(TetrisManager* tetrisManager, int blockType, int isSplash)
 	{
 		if (tetrisManager->isSplashMode == 1)
 		{
+			WaitForSingleObject(((TetrisManager*)tetrisManager)->mutex, INFINITE);		// LOCK 걸기
 			for (i = 1; i < BOARD_ROW_SIZE - 1; i++) {
 				for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
 					if (tetrisManager->board[i][j] == FIXED_BLOCK) //// fixed block을 기준으로 가로,세로 길이 탐색
 					{
-						WaitForSingleObject(((TetrisManager*)tetrisManager)->mutex, INFINITE);		// LOCK 걸기
+						
 						for (j = 1; j < BOARD_COL_SIZE - 1; j++) {
 							CursorUtil_GotoXY(2 * j, i);;
 							printf("▒"); //// 탐색한 길이 만큼 출력 
 						}
-						ReleaseMutex(((TetrisManager*)tetrisManager)->mutex);						// LOCK 해제
+						
 					}
 				}
 			}
+			ReleaseMutex(((TetrisManager*)tetrisManager)->mutex);						// LOCK 해제
 		}
 	}
 	////splash가 끝났을 때 원상복구
@@ -1403,6 +1405,5 @@ void TetrisManager_PrintChangeNextCount(TetrisManager tetrisManager){
 	CursorUtil_GotoXY(x, y++);
 	printf("┗━━━━┛");
 	ReleaseMutex(tetrisManager.mutex);						// LOCK 해제
-
-
+	
 }
